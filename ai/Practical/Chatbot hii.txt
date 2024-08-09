@@ -1,0 +1,40 @@
+from tkinter import * # Importing the tkinter module
+
+# Creating the root window
+root = Tk()
+
+# Setting the title of the window
+root.title("Chatbot")
+
+# Defining the 'send' function
+def send():
+    send = "You ->"+e.get() # Combining the user input and "You->" string
+    txt.insert(END, "\n"+send) # Inserting the combined string to the text widget
+    user = e.get().lower() # Converting user input to lowercase
+    if user == "hello": # If user input is "hello"
+        txt.insert(END, "\n" + "Bot -> Hi") # Insert "Bot -> Hi" to the text widget
+    elif user in ["hi", "hii", "hiiii"]:  # If user input is "hi" or "hii" or "hiiii"
+        txt.insert(END, "\n" + "Bot -> fine! and you") # Insert "Bot -> fine! and you" to the text widget
+    elif user in ["fine", "i am good", "i am doing good"]: # If user input is "fine" or "i am good" or "i am doing good"
+        txt.insert(END, "\n" + "Bot -> Great! how can I help you") # Insert "Bot -> Great! how can I help you" to the text widget
+    else: # For any other input
+        txt.insert(END, "\n" + "Bot -> Sorry! I didn't understand you") # Insert "Bot -> Sorry! I didn't understand you" to the text widget
+    e.delete(0, END) # Clearing the entry widget after sending the message
+
+# Creating the text widget
+#A "text widget" is a GUI element that allows the user to display or edit multiline text. In the code provided, the Text() widget is used to create a text box where the conversation #between the user and the chatbot will be displayed.
+
+txt = Text(root)
+txt.grid(row=0, column=0,columnspan=2)
+
+# Creating the entry widget
+#An "entry widget" is a GUI element that allows the user to enter a single line of text. In the code provided, the Entry() widget is used to create an input box where the user can #enter their message to the chatbot.
+
+e=Entry(root,width=100)
+e.grid(row=1,column=0)
+
+# Creating the 'Send' button widget
+send = Button(root, text="Send", command=send).grid(row=1,column=1)
+
+# Running the main loop
+root.mainloop()

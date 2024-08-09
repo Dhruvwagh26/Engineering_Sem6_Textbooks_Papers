@@ -1,0 +1,101 @@
+# Define a Graph class
+class Graph:
+    
+    # Constructor to initialize the graph object
+    def __init__(self, size):
+        # Create a matrix filled with zeros of size (size x size)
+        self.adj_matrix = [[0] * size for _ in range(size)]
+        # Set the size of the graph
+        self.size = size
+        # Create a list to store vertex data, fill it with empty strings of length size
+        self.vertex_data = [''] * size
+        
+    # Method to add an edge to the graph
+    def add_edge(self, u, v, weight):
+        # Check if the given vertices are valid
+        if 0 <= u < self.size and 0 <= v < self.size:
+            # Add the weight to the adjacency matrix between the two vertices
+            self.adj_matrix[u][v] = weight
+            # As this is an undirected graph, add the weight to the adjacency matrix in reverse as well
+            self.adj_matrix[v][u] = weight
+    
+    # Method to add data to a vertex in the graph
+    def add_vertex_data(self, vertex, data):
+        # Check if the given vertex is valid
+        if 0 <= vertex < self.size:
+            # Add the data to the vertex data list at the given index
+            self.vertex_data[vertex] = data
+    
+    # Method to implement Dijkstra's algorithm
+    def dijkstra(self, start_vertex_data):
+        # Get the index of the start vertex from vertex data list
+        start_vertex = self.vertex_data.index(start_vertex_data)
+        # Create a list to store the minimum distances to each vertex from start_vertex
+        distances = [float('inf')] * self.size
+        # Set the distance from start_vertex to itself as 0
+        distances[start_vertex] = 0
+        # Create a list to store whether a vertex is visited or not
+        visited = [False] * self.size
+        
+        # Loop over all the vertices in the graph
+        for _ in range(self.size):
+            # Initialize the minimum distance and vertex u
+            min_distance = float('inf')
+            u = None
+            
+            # Loop over all the vertices to find the minimum distance vertex that has not been visited yet
+            for i in range(self.size):
+                if not visited[i] and distances[i] < min_distance:
+                    min_distance = distances[i]
+                    u = i
+            
+            # If no vertex is found, break the loop
+            if u is None:
+                break
+            
+            # Mark the vertex u as visited
+            visited[u] = True
+            
+            # Loop over all the neighboring vertices of u
+            for v in range(self.size):
+                if self.adj_matrix[u][v] != 0 and not visited[v]:
+                    # Calculate the alternative distance alt from start_vertex to v via u
+                    alt = distances[u] + self.adj_matrix[u][v]
+                    # If the alternative distance is less than the current distance, update the distance
+                    if alt < distances[v]:
+                        distances[v] = alt
+        
+        # Return the list of distances from start_vertex to all other vertices in the graph
+        return distances
+    
+# Create a Graph object of size 7
+g = Graph(7)
+
+# Add data to the vertices of the graph
+g.add_vertex_data(0, 'A')
+g.add_vertex_data(1, 'B')
+g.add_vertex_data(2, 'C')
+g.add_vertex_data(3, 'D')
+g.add_vertex_data(4, 'E')
+g.add_vertex_data(5, 'F')
+g.add_vertex_data(6, 'G')
+
+# Add edges to the graph along with their weights
+g.add_edge(3, 0, 4)  # D - A, weight 5
+g.add_edge(3, 4, 2)  # D - E, weight 2
+g.add_edge(0, 2, 3)  # A - C, weight 3
+g.add_edge(0, 4, 4)  # A - E, weight 4
+g.add_edge(4, 2, 4)  # E - C, weight 4
+g.add_edge(4, 6, 5)  # E - G, weight 5
+g.add_edge(2, 5, 5)  # C - F, weight 5
+g.add_edge(2, 1, 2)  # C - B, weight 2
+g.add_edge(1, 5, 2)  # B - F, weight 2
+g.add_edge(6, 5, 5)  # G - F, weight 5
+
+# Implement Dijkstra's algorithm for vertex 'D'
+print("\nDijkstra's Algorithm starting from vertex D:")
+# Get the list of distances from vertex 'D' to all other vertices
+distances = g.dijkstra('D')
+# Print the distances from vertex 'D' to all other vertices
+for i, d in enumerate(distances):
+    print(f"Distance from D to {g.vertex_data[i]}: {d}")

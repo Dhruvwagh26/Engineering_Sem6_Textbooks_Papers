@@ -1,0 +1,55 @@
+INF = 9999
+
+# Set value of N to 5
+N=5
+
+# Create matrix G with 5 rows and 5 columns
+# Initialize with values as shown
+G = [[0,19,5,0,0],
+     [19,0,5,9,2],
+     [5,5,0,1,6],
+     [0,9,1,0,1],
+     [0,2,6,1,0]]
+
+# Create an array selected_node with 5 elements, all set to 0
+selected_node = [0,0,0,0,0]
+
+# Set no_edge to 0
+no_edge = 0
+
+# Set first element of selected_node to True
+selected_node[0]=True
+
+# Print "Edge: weight" to console
+print("Edge: weight\n")
+
+# While number of edges is less than N-1
+while(no_edge < N-1):
+    
+    minimum = INF
+    a=0
+    b=0
+    
+    # Loop over all nodes of G
+    for m in range(N):
+        # If mth node is selected
+        if selected_node[m]:
+            # Loop over all nodes of G
+            for n in range(N):
+                # If nth node is not selected and there exists an edge between mth and nth node
+                if((not selected_node[n]) and G[m][n]):
+                    # If weight of edge between mth and nth node is less than minimum
+                    if minimum > G[m][n]:
+                        # Set minimum to weight of edge between mth and nth node
+                        minimum = G[m][n]
+                        # Set a to mth node index
+                        a=m
+                        # Set b to nth node index
+                        b=n
+    
+    # Print edge and its weight to console
+    print(str(a) + "-" + str(b) + ":" + str(G[a][b]))
+    # Set selected_node of bth node to True
+    selected_node[b] = True
+    # Increment no_edge by 1
+    no_edge += 1

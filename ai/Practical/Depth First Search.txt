@@ -1,0 +1,25 @@
+graph = {
+    '5':['3','7'],
+    '3':['2','4'],
+    '7':['8'],
+    '2':[],
+    '4':['8'],
+    '8':[]
+}
+
+# Define an empty set to store visited nodes
+visited = set() 
+
+# Define a recursive function that performs depth first search
+def dfs(visited, graph, node):
+    # If the current node has not been visited, print it and add it to the visited set
+    if node not in visited:
+        print(node)
+        visited.add(node)
+        # For each neighbor of the current node, recursively call the dfs function
+        for neighbour in graph[node]:
+            dfs(visited, graph, neighbour)
+            
+# Call the dfs function starting from node '5'
+print("Following is the Depth-First Search")
+dfs(visited, graph, '5')

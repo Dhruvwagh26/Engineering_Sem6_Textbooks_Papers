@@ -1,0 +1,65 @@
+# Defining a function to check if a position on the board is safe
+def issafe(arr,x,y,n):
+    # Looping through all rows above the current row
+    for row in range(x):
+        # If there is a queen in the same column as the current position, return False
+        if arr[row][y] ==1:
+            # Checking column attack
+            return False
+    # Initialize variables for the diagonal check
+    row = x
+    col = y
+    # Checking Diagonal Attack
+    while row>=0 and col>=0:
+        # If there is a queen in the same diagonal as the current position, return False
+        if arr[row][col]==1:
+            return False
+        row-= 1
+        col-= 1
+    # Re-initialize variables for the anti-diagonal check
+    row = x
+    col = y
+    # Checking Anti Diagonal Attack
+    while row>=0 and col<n:
+        # If there is a queen in the same anti-diagonal as the current position, return False
+        if arr[row][col]==1:
+            return False
+        row-=1
+        col+=1
+    # If position is safe, return True
+    return True
+
+# Defining the nQueen function to solve the problem recursively
+def nQueen(arr,x,n):
+    # If all queens have been placed, return True
+    if x>=n:
+        return True
+    # Looping through all columns in the current row
+    for col in range(n):
+        # If the current position is safe, place a queen at that position
+        if issafe(arr,x,col,n):
+            arr[x][col]=1
+            # Recursively call nQueen with the next row
+            if nQueen(arr,x+1,n):
+                return True
+            # If the recursive call returns False, remove the queen from the current position
+            arr[x][col] = 0
+    # If no position is safe, return False
+    return False
+
+# Defining the main function
+def main():
+    # Asking for user input
+    n = int(input("Enter number of Queens : "))
+    # Creating an empty chessboard
+    arr = [[0]*n for i in range(n)]
+    # Solving the n-queen problem using the nQueen function
+    if nQueen(arr,0,n):
+        # Printing the solution
+        for i in range(n):
+            for j in range(n):
+                print(arr[i][j],end=" ")
+            print()
+
+# Calling the main function
+main()

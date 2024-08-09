@@ -1,0 +1,44 @@
+# define the jobs, their profits and deadlines
+# jobs is an array of job names, profit is an array of job profits, and deadline is an array of job deadlines
+profit = [15,27,10,100,150]
+jobs = ["j1", "j2", "j3", "j4", "j5"]
+deadline = [2,3,3,3,4]
+
+# zip the profit, job and deadline list together to create a list of tuples containing all the relevant information for each job
+# this makes it easier to sort the list by profit and access the relevant information for each job later in the code
+profitNJobs = list(zip(profit,jobs,deadline))
+
+# sort the jobs in decreasing order of their profits using lambda function 
+# this ensures that the most profitable jobs are scheduled first
+profitNJobs = sorted(profitNJobs, key = lambda x: x[0], reverse = True)
+
+# create an array to keep track of the time slots in which jobs are scheduled
+# initialize all slots to 0, indicating that no jobs have been scheduled in them yet
+slot = []
+for _ in range(len(jobs)):
+    slot.append(0)
+
+# initialize variables to keep track of the total profit and the list of scheduled jobs
+profit = 0
+ans = []
+
+# initialize the list of scheduled jobs to contain 'null' for each job
+# this list will be updated as jobs are scheduled
+for i in range(len(jobs)):
+    ans.append('null')
+
+# loop through each job and try to schedule it in the earliest possible time slot before its deadline
+for i in range(len(jobs)):
+    job = profitNJobs[i] # get the next most profitable job
+    # loop through the time slots from the job's deadline down to 1
+    # this ensures that the job is scheduled in the earliest possible time slot before its deadline
+    for j in range(job[2], 0, -1):
+        if slot[j] == 0: # if the current time slot is empty
+            ans[j] = job[1] # schedule the job in this time slot
+            profit += job[0] # add the job's profit to the total profit
+            slot[j] = 1 # mark the time slot as occupied
+            break # exit the loop to move on to the next job
+
+# print the list of scheduled jobs and the total profit
+print("Jobs scheduled buddy:",ans[1:])
+print(profit)

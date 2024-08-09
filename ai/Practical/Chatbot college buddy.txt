@@ -1,0 +1,69 @@
+# Importing the streamlit library
+import streamlit as st
+
+# Setting the bot name to "College Buddy"
+bot_name = "College Buddy"
+
+# Creating a dictionary of knowledge base for the bot
+knowledge_base = {
+    "what is your name?" : [ f"My name is {bot_name}! \n Happy to help you out with your College enquiries!"],
+    "hello": [f"Hello my name is {bot_name}! \n Happy to help you out with your College enquiries!"],
+    "what are the best colleges from pune?":[ "COEP","PICT","VIT","CUMMINS","PCCOE"],
+    "which are the best engineering branches?" : ["Computer Engineering","IT Engineering","ENTC Engineering"],
+    "what are the top branch cut-offs for coep?" : ["Computer Engineering : 99.8 percentile","Does not have IT branch","ENTC Engineering: 99.2 percentile",],
+    "what are the top branch cut-offs for pict?" : ["Computer Engineering : 99.4 percentile","IT Engineering : 98.6 percentile","ENTC Engineering: 97.2 percentile",],
+    "what are the top branch cut-offs for vit?" : ["Computer Engineering : 99.8 percentile","IT Engineering: 97.1 percentile","ENTC Engineering: 96.2 percentile",],
+    "what are the top branch cut-offs for cummins?" : ["Computer Engineering : 99.8 percentile","Does not have IT branch","ENTC Engineering: 99.2",],
+    "what are the top branch cut-offs for pccoe?" : ["Computer Engineering : 99.8 percentile","Does not have IT branch","ENTC Engineering: 99.2",],
+    "When do college admissions start?": ["Admissions generally start around August",],
+}
+
+# Setting the header for the chatbot
+st.header("College Enquiry Rule Based Chatbot")
+
+# Defining the respond function which takes input string as parameter
+def respond(input: str):
+    # Checking if the input is present in the knowledge base
+    if (input in knowledge_base):
+        # Printing the input
+        print(input)
+        # Storing the list of values for the input key
+        values = knowledge_base[input]
+        # Looping over the values and writing them in the streamlit app
+        for value in values:
+            st.write(value)
+    else:
+        # If the input is not present in the knowledge base
+        print(input)
+        # Storing the key as input
+        key = input
+        # Writing a message in the streamlit app asking for user input
+        st.write("Question is not present in the knowledge base!\nCould you please enter the appropriate answer for the question below-")
+        # Taking user input for the answer
+        answer = st.text_input("Answer")
+        # Creating a button to add the answer to the knowledge base
+        add = st.button("Add answer")
+        if (add):
+            # If the button is clicked, adding the answer to the knowledge base
+            knowledge_base[key] = [answer]
+
+# Main function
+if __name__ == "__main__":
+    # Taking input from the user through text input in the streamlit app
+    input = st.text_input("Enter a query here-")
+    # Converting the input to lowercase
+    input = input.lower()
+    # Creating two columns in the streamlit app for two buttons
+    col1, col2 = st.columns([1,0.1])
+    with col1:
+        # Creating a button to ask the input query
+        ask = st.button("Ask")
+    with col2:
+        # Creating a button to quit the chatbot
+        quit = st.button("Quit")
+    if (ask):
+        # If the ask button is clicked, calling the respond function with input as parameter
+        respond(input)
+    if (quit):
+        # If the quit button is clicked, writing a thank you message in the streamlit app
+        st.write("Thank you for using the Chatbot")

@@ -1,0 +1,25 @@
+def selectionSort(array, size):
+    # iterate over each element of the array
+    for ind in range(size):
+        # assume the current index has the minimum value
+        min_index = ind
+
+        # iterate over the remaining elements to find the minimum value
+        for j in range(ind + 1, size):
+            # check if the current element is smaller than the assumed minimum
+            if array[j] < array[min_index]:
+                # update the index of the minimum element
+                min_index = j
+
+        # swap the minimum element with the current element if the minimum is not the current one
+        if ind != min_index:
+            (array[ind], array[min_index]) = (array[min_index], array[ind])
+
+
+arr = [-2, 45, 0, 11, -9, 88, -97, -202, 747]
+size = len(arr)
+selectionSort(arr, size)
+
+# print the sorted array
+print('The array after sorting in Ascending Order by selection sort is:')
+print(arr)

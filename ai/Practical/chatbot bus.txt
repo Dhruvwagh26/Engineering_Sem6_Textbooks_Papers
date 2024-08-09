@@ -1,0 +1,96 @@
+# Import necessary modules
+import tkinter as tk  # Tkinter is Python's standard GUI (Graphical User Interface) package
+from tkinter import scrolledtext  # Import ScrolledText from tkinter module
+from nltk.chat.util import Chat, reflections  # Import Chat and reflections from nltk.chat.util
+
+# Define pairs of user inputs and corresponding chatbot responses
+pairs = [
+    [
+        r"hi|hello",  # Regular expression pattern to match with user input
+        ["Hello!", "Hi there!", "How can I assist you today?"]  # Chatbot responses for the above pattern
+    ],
+    [
+        r"book a bus|bus booking",
+        ["Sure! To which destination would you like to book a bus?"]
+    ],
+    [
+        r"(.*) to (.*)",
+        ["I can help you find available buses from %1 to %2. Please provide the date of travel."]
+    ],
+    [
+        r"hi|hello|hey",
+        ["Hello", "Hey there",]
+    ],
+    [
+        r"book a bus ticket",
+        ["Sure, I can assist you with that. Please provide the source and destination locations, as well as the travel date."]
+    ],
+    [
+        r"I want to travel from (.*) to (.*) on (.*)",
+        ["Great! Let me check the availability of buses from %1 to %2 on %3."]
+    ],
+    [
+        r"available buses",
+        ["Here are the available buses for your selected route: \n1. Bus 1 \n2. Bus 2 \n3. Bus 3"]
+    ],
+    [
+        r"book bus (\d+)",
+        ["Bus %1 has been booked successfully. Please provide your contact details for ticket confirmation."]
+    ],
+    [
+        r"my name is (.*)",
+        ["Nice to meet you, %1. Can you please provide your phone number?"]
+    ],
+    [
+        r"phone number is (\d+)",
+        ["Thank you for providing your contact details. Your ticket will be sent to %1. Have a pleasant journey!"]
+    ],
+    [
+        r"quit",
+        ["Thank you for using our Redbus chatbot. Goodbye!"]
+    ],
+    [
+        r"(.*) 2023",
+        ["Ok , I'll see if any buses are available. Yes available ! Do you want to book a bus on %1"]
+    ],
+    [
+        r"(.*)",
+        ["I'm sorry, I didn't understand. Could you please rephrase your query?"]
+    ]
+]
+
+# Create a chat bot based on the defined pairs
+chatbot = Chat(pairs, reflections)
+
+# Function to handle user input and display responses
+def send():
+    user_input = user_entry.get()  # Get user input from Entry widget
+    response = chatbot.respond(user_input)  # Get chatbot response based on user input
+    chat_display.insert(tk.END, "User     >>  " + user_input + "\n")  # Display user input in chat display area
+    chat_display.insert(tk.END, "ChatBot  >>  " + response + "\n\n")  # Display chatbot response in chat display area
+    user_entry.delete(0, tk.END)  # Clear user input from Entry widget
+
+# Create the main window
+window = tk.Tk()  # Create a new instance of Tkinter's Tk class
+window.title("Redbus Customer Interaction")  # Set the title of the window
+
+# Create the chat display area
+chat_display = scrolledtext.ScrolledText(window, width=80, height=25)  # Create ScrolledText widget for chat display area
+chat_display.insert(tk.END, "WELCOME TO REDBUS ... BOOK FROM ANYWHERE ANYTIME \n\n")  # Add welcome message to chat display area
+chat_display.pack()  # Pack chat display area into the main window
+chat_display.configure(fg='red')  # Set foreground color of chat display area to red
+
+# Create the user input field
+user_entry = tk.Entry(window, width=100)  # Create Entry widget for user input field
+user_entry.pack()  # Pack user input field into the main window
+
+# Create the send button
+send_button = tk.Button(window, text="Send", command=send, fg='green', width=20)  # Create Button widget for send button
+send_button.pack()  # Pack send button into the main window
+
+# Create the quit button
+quit_button = tk.Button(window, text="Quit" , command=window.destroy, fg='red', width=20)  # Create Button widget for quit button
+quit_button.pack()  # Pack quit button into the main window
+
+# Run the main loop
+window.mainloop()  # Start the main event loop of the Tkinter window, which keeps the window open until the user closes it

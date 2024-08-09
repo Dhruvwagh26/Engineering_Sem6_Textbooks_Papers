@@ -1,0 +1,111 @@
+# Define a Graph class
+class Graph:
+    # Constructor initializes the size of the graph and creates an empty edges list and vertex data list
+    def __init__(self, size):
+        self.size = size
+        self.edges = []  # For storing edges as (weight, u, v)
+        self.vertex_data = [''] * size  # Store vertex names
+
+    # Method for adding edges to the graph
+    def add_edge(self, u, v, weight):
+        # Check if the vertices u and v are within the range of the size of the graph
+        if 0 <= u < self.size and 0 <= v < self.size:
+            self.edges.append((u, v, weight))  # Add edge with weight
+            
+    # Method for adding vertex data to the graph
+    def add_vertex_data(self, vertex, data):
+        # Check if the vertex is within the range of the size of the graph
+        if 0 <= vertex < self.size:
+            self.vertex_data[vertex] = data
+
+    # Method to find the parent of a node in the graph
+    def find(self, parent, i):
+        # If the parent of the node is itself, return the node
+        if parent[i] == i:
+            return i
+        # Recursively call find on the parent of the node
+        return self.find(parent, parent[i])
+
+    # Method for performing union operation on two nodes
+    def union(self, parent, rank, x, y):
+        # Find the roots of the two nodes
+        xroot = self.find(parent, x)
+        yroot = self.find(parent, y)
+        
+        # If the rank of xroot is less than the rank of yroot, set the parent of xroot as yroot
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+        # If the rank of xroot is greater than the rank of yroot, set the parent of yroot as xroot
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+        # If the rank of xroot and yroot are equal, set the parent of yroot as xroot and increase the rank of xroot by 1
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+
+    # Method for performing Kruskal's algorithm on the graph
+    def kruskals_algorithm(self):
+        # Initialize an empty result list to store the minimum spanning tree (MST)
+        result = []
+        # Initialize the edge counter to 0
+        i = 0  
+
+        # Sort the edges in the graph in ascending order of their weights
+        self.edges = sorted(self.edges, key=lambda item: item[2])
+
+        # Initialize two empty lists for parent and rank
+        parent, rank = [], []
+
+        # Loop through all the nodes in the graph and initialize their parent and rank
+        for node in range(self.size):
+            parent.append(node)
+            rank.append(0)
+
+        # Loop through all the edges in the graph
+        while i < len(self.edges):
+            # Get the vertices and weight of the current edge
+            u, v, weight = self.edges[i]
+            i += 1
+            
+            # Find the roots of the vertices
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+            
+            # If the roots of the vertices are not the same, add the edge to the result list and perform union operation
+            if x != y:
+                result.append((u, v, weight))
+                self.union(parent, rank, x, y)
+
+        # Print the minimum spanning tree
+        print("Edge \tWeight")
+        for u, v, weight in result:
+            print(f"{self.vertex_data[u]}-{self.vertex_data[v]} \t{weight}")
+
+# Create a new graph object with 7 vertices
+g = Graph(7)
+
+# Add vertex data to the graph
+g.add_vertex_data(0, 'A')
+g.add_vertex_data(1, 'B')
+g.add_vertex_data(2, 'C')
+g.add_vertex_data(3, 'D')
+g.add_vertex_data(4, 'E')
+g.add_vertex_data(5, 'F')
+g.add_vertex_data(6, 'G')
+
+# Add edges to the graph
+g.add_edge(0, 1, 4)  #A-B,  4
+g.add_edge(0, 6, 10) #A-G, 10
+g.add_edge(0, 2, 9)  #A-C,  9
+g.add_edge(1, 2, 8)  #B-C,  8
+g.add_edge(2, 3, 5)  #C-D,  5
+g.add_edge(2, 4, 2)  #C-E,  2
+g.add_edge(2, 6, 7)  #C-G,  7
+g.add_edge(3, 4, 3)  #D-E,  3
+g.add_edge(3, 5, 7)  #D-F,  7
+g.add_edge(4, 6, 6)  #E-G,  6
+g.add_edge(5, 6, 11) #F-G, 11
+
+# Print the minimum spanning tree using Kruskal's algorithm
+print("Kruskal's Algorithm MST:")
+g.kruskals_algorithm()
